@@ -18,6 +18,8 @@ router.post('/userinfo', function(req, res, next){
         username: newinfo.name,
         password: newinfo.password,
         usertel: newinfo.tel,
+        userbirthday:newinfo.birthday,
+        useremail:newinfo.email,
     });
     res.status(201).json("success User registration ");
 });
