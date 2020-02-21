@@ -19,11 +19,12 @@ module.exports = new EntitySchema({
     userid:{
         type: 'varchar',
         length: 20,
-        nullable:false
+        nullable:false,
+        unique:true
     },
     password: {
       type: 'varchar',
-      length: 20, // 문자열의 최대 길이
+      length: 200, // 문자열의 최대 길이
       nullable: false // 값이 없는 것을 허용하는지 여부
     },
     usertel:{
