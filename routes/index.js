@@ -6,7 +6,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const UserInfo = require('../schemas/UserinfoSchemas');
-
+const Concert = require('../schemas/ConcertSchemas');
+const ConcertSite = require('../schemas/ConcertSiteSchemas');
+const SiteSeat = require('../schemas/SiteSeatSchemas');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -121,4 +123,45 @@ router.post('/checkid/:userid', function(req, res){
         }
     });
 });
+
+/* Insert Concert Information using Insomnia */
+router.post('/registerConcert', function (req, res, next) {
+    const concert = req.body;
+    const connection = getConnection();
+    const repository = connection.getRepository(Concert.options.name);
+    repository.insert({
+        name: concert.name,
+        imgUrl: concert.imgUrl,
+        date: concert.date,
+        time: concert.time,
+        price: concert.price,
+        rank: concert.rank,
+        concertPlace: concert.concertPlace
+    });
+    res.status(201).json();
+});
+
+/* Insert ConcertSite Information using Insomnia */
+router.post('/registerConcertSite', function (req, res, next) {
+    const concertSite = req.body;
+    const connection = getConnection();
+    const repository = connection.getRepository(ConcertSite.options.name);
+    repository.insert({
+        name: concertSite.name,
+        seat: concertSite.seat
+    });
+    res.status(201).json();
+});
+
+/* Insert SiteSeat Information using Insomnia */
+router.post('/registerSiteSeat', function (req, res, next) {
+    const concertSite = req.body;
+    const connection = getConnection();
+    const repository = connection.getRepository(SiteSeat.options.name);
+    repository.insert({
+        name: concertSite.name,
+    });
+    res.status(201).json();
+});
+
 module.exports = router;
