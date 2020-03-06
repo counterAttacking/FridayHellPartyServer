@@ -9,6 +9,7 @@ const UserInfo = require('../schemas/UserinfoSchemas');
 const Concert = require('../schemas/ConcertSchemas');
 const ConcertSite = require('../schemas/ConcertSiteSchemas');
 const SiteSeat = require('../schemas/SiteSeatSchemas');
+const ReservationInfo = require('../schemas/ReservationInfoSchemas');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -140,7 +141,14 @@ router.post('/registerConcert', function (req, res, next) {
     });
     res.status(201).json();
 });
-
+router.get('/getConcert', function (req, res, next) {
+    const connection = getConnection();
+    const repository = connection.getRepository(Concert.options.name);
+    repository.find().then((result)=>{
+        res.status(200).json(result);
+    });
+    
+});
 /* Insert ConcertSite Information using Insomnia */
 router.post('/registerConcertSite', function (req, res, next) {
     const concertSite = req.body;
@@ -164,4 +172,37 @@ router.post('/registerSiteSeat', function (req, res, next) {
     res.status(201).json();
 });
 
+router.post('/reservation/:concertname/:row/:col', function (req, res, next) {
+    const concertname = req.params.concertname
+    const row = req.params.row
+    const col = req.params.col
+    const concertSite = req.body;
+    const connection = getConnection();
+    const repository = connection.getRepository(ReservationInfo.options.name);
+    repository.findOne({where:{concertname, row, col}}).then((result)=>{
+        if(result != null){
+            return res.status(401).json();
+        }
+        else{
+            repository.insert({
+                concertname: concertSite.concertname,
+                userid: concertSite.userid,
+                row: concertSite.row,
+                col: concertSite.col,
+            });
+            return res.status(201).json("ss");
+        }
+    })
+});
+
+router.get('/reservation/:concertname', function (req, res, next) {
+    const userid = req.params.userid;
+    const concertname = req.params.concertname
+    const connection = getConnection();
+    const repository = connection.getRepository(ReservationInfo.options.name);
+    repository.find({where:{concertname}}).then((result)=>{
+        res.status(200).json(result);
+    });
+});
+// , {concertname:{concertname}}
 module.exports = router;
