@@ -141,14 +141,7 @@ router.post('/registerConcert', function (req, res, next) {
     });
     res.status(201).json();
 });
-router.get('/getConcert', function (req, res, next) {
-    const connection = getConnection();
-    const repository = connection.getRepository(Concert.options.name);
-    repository.find().then((result)=>{
-        res.status(200).json(result);
-    });
-    
-});
+
 /* Insert ConcertSite Information using Insomnia */
 router.post('/registerConcertSite', function (req, res, next) {
     const concertSite = req.body;
@@ -172,7 +165,6 @@ router.post('/registerSiteSeat', function (req, res, next) {
     res.status(201).json();
 });
 
-
 /* Get Concert Information */
 router.get('/getConcert/:concertId', function (req, res, next) {
     const id = req.params.concertId;
@@ -182,7 +174,6 @@ router.get('/getConcert/:concertId', function (req, res, next) {
         res.status(200).json(result);
     });
 })
-
 
 router.post('/reservation/:concertname/:row/:col', function (req, res, next) {
     const concertname = req.params.concertname
