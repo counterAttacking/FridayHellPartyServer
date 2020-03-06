@@ -164,4 +164,14 @@ router.post('/registerSiteSeat', function (req, res, next) {
     res.status(201).json();
 });
 
+/* Get Concert Information */
+router.get('/getConcert/:concertId', function (req, res, next) {
+    const id = req.params.concertId;
+    const connection = getConnection();
+    const repository = connection.getRepository(Concert.options.name);
+    repository.findOne({ where: { id } }).then((result) => {
+        res.status(200).json(result);
+    });
+})
+
 module.exports = router;
