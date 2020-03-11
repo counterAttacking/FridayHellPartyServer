@@ -18,18 +18,18 @@ module.exports = new EntitySchema({
         },
         concertname: {
             type: 'varchar',
-            length:50,
-            nullable:false,
+            length: 50,
+            nullable: false,
         },
-        row:{
-            type:'bigint',
-            nullable:false,
+        row: {
+            type: 'bigint',
+            nullable: false,
         },
-        col:{
-            type:'bigint',
-            primary:true,
-            nullable:false,
+        col: {
+            type: 'bigint',
+            primary: true,
+            nullable: false,
         },
     }
-       
+
 });
