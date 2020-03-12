@@ -218,7 +218,7 @@ router.get('/reservationid/:id', function (req, res, next) {
 });
 
 router.post('/registerReservation', function (req, res, next) {
-    const { reservationId,reservationDate,reservationPersonCnt,reservationSeatRow,reservationSeatCol,userId,concertId,payType } = req.body;
+    const { reservationId, reservationDate, reservationPersonCnt, reservationSeatRow, reservationSeatCol, userId, concertId, payType } = req.body;
     const connection = getConnection();
     const repository = connection.getRepository(Reservation.options.name);
     repository.insert({
