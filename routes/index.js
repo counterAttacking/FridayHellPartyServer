@@ -10,6 +10,7 @@ const Concert = require('../schemas/ConcertSchemas');
 const ConcertSite = require('../schemas/ConcertSiteSchemas');
 const SiteSeat = require('../schemas/SiteSeatSchemas');
 const ReservationInfo = require('../schemas/ReservationInfoSchemas');
+const Reservation = require('../schemas/ReservationSchemas');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -215,6 +216,22 @@ router.get('/reservationid/:id', function (req, res, next) {
         res.status(200).json(result);
     });
 });
-// , {concertname:{concertname}}
+
+router.post('/registerReservation', function (req, res, next) {
+    const { reservationId,reservationDate,reservationPersonCnt,reservationSeatRow,reservationSeatCol,userId,concertId,payType } = req.body;
+    const connection = getConnection();
+    const repository = connection.getRepository(Reservation.options.name);
+    repository.insert({
+        reservationId: reservationId,
+        reservationDate: reservationDate,
+        reservationPersonCnt: reservationPersonCnt,
+        reservationSeatRow: reservationSeatRow,
+        reservationSeatCol: reservationSeatCol,
+        userId: userId,
+        concertId: concertId,
+        payType: payType,
+    });
+    res.status(201).json();
+});
 
 module.exports = router;
