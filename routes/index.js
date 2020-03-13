@@ -201,10 +201,10 @@ router.post('/reservation/:concertname/:row/:col', function (req, res, next) {
 
 router.get('/reservation/:concertid', function (req, res, next) {
     const userid = req.params.userid;
-    const concertid = req.params.concertid
+    const concertId = req.params.concertid
     const connection = getConnection();
     const repository = connection.getRepository(Reservation.options.name);
-    repository.find({ where: { concertid } }).then((result) => {
+    repository.find({ where: { concertId } }).then((result) => {
         res.status(200).json(result);
     });
 });
