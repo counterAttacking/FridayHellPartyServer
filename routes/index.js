@@ -234,4 +234,14 @@ router.post('/registerReservation', function (req, res, next) {
     res.status(201).json();
 });
 
+/* Get user's reservation Information */
+router.get('/getMyReservation/:id', function (req, res, next) {
+    const id = req.params.userId;
+    const connection = getConnection();
+    const repository = connection.getRepository(Reservation.options.name);
+    repository.find({ where: { id } }).then((result) => {
+        res.status(200).json(result);
+    });
+});
+
 module.exports = router;
