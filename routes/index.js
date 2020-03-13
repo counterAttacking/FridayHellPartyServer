@@ -199,12 +199,12 @@ router.post('/reservation/:concertname/:row/:col', function (req, res, next) {
     })
 });
 
-router.get('/reservation/:concertname', function (req, res, next) {
+router.get('/reservation/:concertid', function (req, res, next) {
     const userid = req.params.userid;
-    const concertname = req.params.concertname
+    const concertid = req.params.concertid
     const connection = getConnection();
-    const repository = connection.getRepository(ReservationInfo.options.name);
-    repository.find({ where: { concertname } }).then((result) => {
+    const repository = connection.getRepository(Reservation.options.name);
+    repository.find({ where: { concertid } }).then((result) => {
         res.status(200).json(result);
     });
 });
