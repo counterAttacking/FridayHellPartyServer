@@ -9,6 +9,7 @@ const UserInfo = require('../schemas/UserinfoSchemas');
 const Concert = require('../schemas/ConcertSchemas');
 const ConcertSite = require('../schemas/ConcertSiteSchemas');
 const SiteSeat = require('../schemas/SiteSeatSchemas');
+const SeatInfo = require('../schemas/SeatInfoSchemas');
 const ReservationInfo = require('../schemas/ReservationInfoSchemas');
 const Reservation = require('../schemas/ReservationSchemas');
 
@@ -165,6 +166,29 @@ router.post('/registerSiteSeat', function (req, res, next) {
     });
     res.status(201).json();
 });
+/*좌석 정보 예약 유무  */
+router.post('/defineSeat', function (req, res, next) {
+    const concertSite = req.body;
+    const connection = getConnection();
+    const repository = connection.getRepository(SeatInfo.options.name);
+    repository.insert({
+        concertplaceid: concertSite.concertplaceid,
+        Row: concertSite.Row,
+        Col: concertSite.Col,
+       
+    });
+    res.status(201).json("ss");
+});
+router.get('/defineSeat/:id', function (req, res, next) {
+    const concertSite = req.body;
+    const concertplaceid = req.params.id;
+    const connection = getConnection();
+    const repository = connection.getRepository(SeatInfo.options.name);
+    repository.find({where:{concertplaceid}}).then((result)=>{
+        res.status(200).json(result);
+    });
+   
+});
 
 /* Get Concert Information */
 router.get('/getConcert/:concertId', function (req, res, next) {
@@ -232,6 +256,20 @@ router.post('/registerReservation', function (req, res, next) {
         payType: payType,
     });
     res.status(201).json();
+});
+router.put('/defineSeat/:id/:Row/:Col', function(req,res){
+    const { TF } = req.body;
+    const Row = req.params.Row;
+    const Col = req.params.Col
+    const concertplaceid = req.params.id;
+    const connection = getConnection();
+    const repository = connection.getRepository(SeatInfo.options.name);
+        repository.update({concertplaceid, Row, Col}, {
+            
+            TF : 0
+        });
+        res.status(201).json();
+    
 });
 
 /* Get user's reservation Information */

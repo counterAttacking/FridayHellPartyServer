@@ -9,4 +9,4 @@ class SiteSeat {
 
 module.exports = {
     SiteSeat,
-};
+}; 
