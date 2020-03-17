@@ -6,7 +6,7 @@ module.exports = new EntitySchema({
     target: Reservation,
     columns: {
         reservationId: {
-            primary:true,
+            primary: true,
             type: 'varchar',
             length: 100,
             nullable: false,
@@ -36,6 +36,14 @@ module.exports = new EntitySchema({
         concertId: {
             type: 'bigint',
             nullable: false,
+        },
+        concertName: {
+            type: 'varchar',
+            length: 30,
+            nullable: false
+        },
+        concertDate: {
+            type: 'date'
         },
         payType: {
             type: 'varchar',
