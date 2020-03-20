@@ -12,5 +12,5 @@ module.exports = {
     ],
     namingStrategy: new SnakeNamingStrategy(),
     synchronize: true,
-    logging: true
+    logging: true,
 };

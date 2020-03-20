@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var moment = require('moment');
 const { getConnection } = require('typeorm');
 const config = require('config');
 const bcrypt = require('bcrypt');
@@ -242,7 +243,7 @@ router.get('/reservationid/:id', function (req, res, next) {
 });
 
 router.post('/registerReservation', function (req, res, next) {
-    const { reservationId, reservationDate, reservationPersonCnt, reservationSeatRow, reservationSeatCol, userId, concertId, concertName, concertDate, payType } = req.body;
+    const { reservationId, reservationDate, reservationPersonCnt, reservationSeatRow, reservationSeatCol, userId, concertId, concertName, concertPlace, concertDate, payType, price } = req.body;
     const connection = getConnection();
     const repository = connection.getRepository(Reservation.options.name);
     repository.insert({
@@ -254,8 +255,10 @@ router.post('/registerReservation', function (req, res, next) {
         userId: userId,
         concertId: concertId,
         concertName: concertName,
+        concertPlace: concertPlace,
         concertDate: concertDate,
         payType: payType,
+        price: price,
     });
     res.status(201).json();
 });
@@ -285,15 +288,12 @@ router.get('/getMyReservation/:id', function (req, res, next) {
     });
 });
 
-router.get('/getMyReservation2/:id', function (req, res, next) {
+router.get('/getMyDetailReservation/:id', function (req, res, next) {
     const id = req.params.id;
     const connection = getConnection();
     const repository = connection.getRepository(Reservation.options.name);
-    repository.find({ where: { userId: id } }).then((result) => {
-        const data = result.map(data => data.concertId);
-        return repository.find({ concertId: In(data) }).then((aa) => {
-            res.status(200).json(aa);
-        });
+    repository.find({ where: { reservationId: id } }).then((result) => {
+        res.status(200).json(result);
     });
 });
 

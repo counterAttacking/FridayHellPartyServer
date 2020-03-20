@@ -42,12 +42,22 @@ module.exports = new EntitySchema({
             length: 30,
             nullable: false
         },
+        concertPlace: {
+            type: 'varchar',
+            length: 50,
+            nullable: false,
+        },
         concertDate: {
-            type: 'date'
+            type: 'date',
+            nullable: false,
         },
         payType: {
             type: 'varchar',
             length: 50,
+            nullable: false,
+        },
+        price: {
+            type: 'bigint',
             nullable: false,
         }
     }
