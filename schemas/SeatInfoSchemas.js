@@ -11,23 +11,23 @@ module.exports = new EntitySchema({
             generated: true
         },
         concertplaceid: {
-            primary: true,
+            
             type: 'bigint',
             nullable: false
         },
         Col: {
-            primary: true,
+            
             type: 'bigint',
             nullable:false,
         },
         Row: {
-            primary: true,
+            
             type: 'varchar',
             length:10,
             nullable:false,
         },
         TF:{
-            primary:true,
+            
             type: 'int',
             default:1,
             nullable:false,

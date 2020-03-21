@@ -190,7 +190,23 @@ router.get('/defineSeat/:id', function (req, res, next) {
     });
 
 });
-
+//예약정보 삭제
+router.delete('/reservationInfoDelete/:reservationId', function (req, res, next) {
+    const reservationId = req.params.reservationId
+    const connection = getConnection();
+    const repository = connection.getRepository(ReservationInfo.options.name);
+    
+    repository.delete({reservationId:reservationId});
+    return res.status(201).json("ss");
+});  
+router.delete('/reservationDelete/:reservationId', function (req, res, next) {
+    const reservationId = req.params.reservationId
+    const connection = getConnection();
+    const repository = connection.getRepository(Reservation.options.name);
+    
+    repository.delete({reservationId:reservationId});
+    return res.status(201).json("ss");
+});  
 /* Get Concert Information */
 router.get('/getConcert/:concertId', function (req, res, next) {
     const id = req.params.concertId;
@@ -201,29 +217,57 @@ router.get('/getConcert/:concertId', function (req, res, next) {
     });
 })
 
-router.post('/reservation/:concertname/:row/:col', function (req, res, next) {
-    const concertname = req.params.concertname
-    const row = req.params.row
-    const col = req.params.col
+router.put('/updateSeat/:id', function (req, res) {
+    const  tf  = req.body;
+    
+    const concertPlaceid = req.params.id;
+    const connection = getConnection();
+    const repository = connection.getRepository(SeatInfo.options.name);
+    
+    for(let i =0;i<tf.length;i++){
+
+        repository.update({ concertplaceid:concertPlaceid, Row:tf.seat[i].row, Col:tf.seat[i].col }, {
+            
+            TF: tf.TF,
+        });
+    }
+    res.status(201).json('ss');
+
+});
+router.post('/reservationpost', function (req, res, next) {
     const concertSite = req.body;
     const connection = getConnection();
     const repository = connection.getRepository(ReservationInfo.options.name);
-    repository.findOne({ where: { concertname, row, col } }).then((result) => {
-        if (result != null) {
-            return res.status(401).json();
-        }
-        else {
-            repository.insert({
-                concertname: concertSite.concertname,
-                userid: concertSite.userid,
-                row: concertSite.row,
-                col: concertSite.col,
-            });
-            return res.status(201).json("ss");
-        }
-    })
-});
+    for(let i = 0;i<concertSite.length;i++){
 
+        repository.insert({
+            concertid: concertSite.concertid,
+            concertplaceid: concertSite.concertplaceid,
+            reservationId:concertSite.reservationId,
+            userid: concertSite.userid,
+            row: concertSite.seat[i].row,
+            col: concertSite.seat[i].col,
+        });
+    }
+    return res.status(201).json("ss");
+});
+router.get('/reservation2/:id', function (req, res, next) {
+    const reservationId = req.params.id;
+    
+    const connection = getConnection();
+    const repository = connection.getRepository(Reservation.options.name);
+    repository.find({ where: { reservationId } }).then((result) => {
+        res.status(200).json(result);
+    });
+});
+router.get('/reservationinfo/:id', function (req, res, next) {
+    const reservationId = req.params.id;
+    const connection = getConnection();
+    const repository = connection.getRepository(ReservationInfo.options.name);
+    repository.find({ where: { reservationId } }).then((result) => {
+        res.status(200).json(result);
+    });
+});
 router.get('/reservation/:concertid', function (req, res, next) {
     const userid = req.params.userid;
     const concertId = req.params.concertid
@@ -233,6 +277,7 @@ router.get('/reservation/:concertid', function (req, res, next) {
         res.status(200).json(result);
     });
 });
+
 router.get('/reservationid/:id', function (req, res, next) {
     const id = req.params.id;
     const connection = getConnection();
@@ -243,15 +288,13 @@ router.get('/reservationid/:id', function (req, res, next) {
 });
 
 router.post('/registerReservation', function (req, res, next) {
-    const { reservationId, reservationDate, reservationPersonCnt, reservationSeatRow, reservationSeatCol, userId, concertId, concertName, concertPlace, concertDate, payType, price } = req.body;
+    const { reservationId, reservationDate, reservationPersonCnt, userId, concertId, concertName, concertPlace, concertDate, payType, price } = req.body;
     const connection = getConnection();
     const repository = connection.getRepository(Reservation.options.name);
     repository.insert({
         reservationId: reservationId,
         reservationDate: reservationDate,
         reservationPersonCnt: reservationPersonCnt,
-        reservationSeatRow: reservationSeatRow,
-        reservationSeatCol: reservationSeatCol,
         userId: userId,
         concertId: concertId,
         concertName: concertName,
@@ -260,23 +303,9 @@ router.post('/registerReservation', function (req, res, next) {
         payType: payType,
         price: price,
     });
-    res.status(201).json();
+    res.status(200).json(reservationId);
 });
 
-router.put('/defineSeat/:id/:Row/:Col', function (req, res) {
-    const { TF } = req.body;
-    const Row = req.params.Row;
-    const Col = req.params.Col
-    const concertplaceid = req.params.id;
-    const connection = getConnection();
-    const repository = connection.getRepository(SeatInfo.options.name);
-    repository.update({ concertplaceid, Row, Col }, {
-
-        TF: 0
-    });
-    res.status(201).json();
-
-});
 
 /* Get user's reservation Information */
 router.get('/getMyReservation/:id', function (req, res, next) {

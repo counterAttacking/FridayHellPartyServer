@@ -19,15 +19,6 @@ module.exports = new EntitySchema({
             type: 'bigint',
             nullable: false,
         },
-        reservationSeatRow: {
-            type: 'varchar',
-            length: 1,
-            nullable: false,
-        },
-        reservationSeatCol: {
-            type: 'bigint',
-            nullable: false,
-        },
         userId: {
             type: 'varchar',
             length: 20,
